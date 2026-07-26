@@ -11,7 +11,7 @@ import orderRouter from "./routes/orderRoutes.js"
 
 //config app
 const app=express()
-const port=4000
+const port=process.env.PORT
 
 //middleware
 app.use(express.json())

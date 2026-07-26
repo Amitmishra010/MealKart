@@ -12,7 +12,7 @@ function FoodItem(food_list) {
     return (
         <div className='w-full m-auto rounded-1xl shadow-[0px_0px_10px] shadow-[#00000015]  animatio-[fadeIn_1s]'>
             <div className='relative '>
-                <img  className="w-full rounded-t-2xl" src={url+"/images/"+food_list.image} alt="" />
+                <img  className="w-full rounded-t-2xl" src={food_list.image} alt={food_list.name} />
                 
                 {
                     

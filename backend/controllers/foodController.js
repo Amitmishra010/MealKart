@@ -1,24 +1,41 @@
 import foodModel from "../models/foodModel.js"
+import cloudinary from "../config/cloudinary.js"
 import fs from "fs"
 
 //add food item
-const addFood=async (req,res)=>{
-let image_filename=`${req.file.filename}`
-const food=new foodModel({
-    name:req.body.name,
-    description:req.body.description,
-    price:req.body.price,
-    category:req.body.category,
-    image:image_filename
-})
-try {
-    await food.save();
-    res.json({success:true,message:"food item added"})
-} catch (error) {
-    console.log(error)
-    res.json({success:false,message:"Error"})
-}
-}
+const addFood = async (req, res) => {
+    try {
+        // Upload image to Cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: "MealKart"
+        });
+
+        // Delete temporary file from uploads folder
+        fs.unlinkSync(req.file.path);
+
+        const food = new foodModel({
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            category: req.body.category,
+            image: result.secure_url
+        });
+
+        await food.save();
+
+        res.json({
+            success: true,
+            message: "Food item added"
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            message: "Error"
+        });
+    }
+};
 //All food list
 const listFood=async (req,res)=>{
      try {
@@ -30,15 +47,21 @@ const listFood=async (req,res)=>{
      }
 }
 //remove food item
-const removeFood=async (req,res)=>{
+const removeFood = async (req, res) => {
     try {
-        const foodItem= await foodModel.findById(req.body.id);
-        fs.unlink(`uploads/${foodItem.image}`,()=>{})
         await foodModel.findByIdAndDelete(req.body.id);
-        res.json({success:true,message:"food item deleted"})
+
+        res.json({
+            success: true,
+            message: "Food item deleted"
+        });
+
     } catch (error) {
         console.log(error);
-        res.json({success:false,message:"Error"});
+        res.json({
+            success: false,
+            message: "Error"
+        });
     }
 }
 export {
