@@ -26,7 +26,7 @@ function Cart() {
                             return(
                                 <div>
                                     <div className='cartItems-item flex flex-row  justify-between m-[10px_0px] text-black'>
-                                    <img className='w-12.5' src={url+"/images/"+item.image} alt="" />
+                                    <img className='w-12.5' src={item.image} alt="" />
                                     <p  className=''>{item.name}</p>
                                     <p className=''>${item.price}</p>
                                     <p className=''>{cartItem[item._id]}</p>
